@@ -91,3 +91,4 @@
 
 Опционально: поделитесь вашими результатами с автором задания. Для этого перейдите по ссылке <a href="https://github.com/vasiliy-mikhailov/gilded_rose_python/issues/new">https://github.com/vasiliy-mikhailov/gilded_rose_python/issues/new</a> и cоздайте Issue с информацией о результатах выполнения задачи в свободной форме.
 
+Удачи!
