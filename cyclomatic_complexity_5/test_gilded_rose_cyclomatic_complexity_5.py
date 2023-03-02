@@ -159,6 +159,15 @@ def test_conjured_items_quality_decreases_twice_as_fast():
     assert item.sell_in == 9
     assert item.quality == 3
 
+def test_conjured_item_quality_never_exceeds_50():
+    """
+    Качество сотворенного предмета никогда не превышает 50.
+    """
+    item = EntityFactory.create(item=Item(name="Aged Brie", sell_in=10, quality=49))
+    item.update_quality()
+    assert item.sell_in == 9
+    assert item.quality == 50
+
 def test_conjured_aged_brie_produce_aged_brie_by_factory():
     """
     Предметы "Conjured Aged Brie" производят сущность AgedBrie

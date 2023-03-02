@@ -107,6 +107,15 @@ def test_conjured_items_quality_decreases_twice_as_fast():
     assert items[0].sell_in == 9
     assert items[0].quality == 3
 
+def test_conjured_item_quality_never_exceeds_50():
+    """
+    Качество сотворенного предмета никогда не превышает 50.
+    """
+    items = [Item(name="Aged Brie", sell_in=10, quality=49),]
+    GildedRose(items).update_quality()
+    assert items[0].sell_in == 9
+    assert items[0].quality == 50
+
 def test_conjured_sulfuras_does_not_sell_and_quality_does_not_decrease():
     """
     Качество «Сотворенного» Sulfuras не ухудшается и он не продается.
