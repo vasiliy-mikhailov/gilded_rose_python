@@ -107,11 +107,20 @@ def test_conjured_items_quality_decreases_twice_as_fast():
     assert items[0].sell_in == 9
     assert items[0].quality == 3
 
+def test_conjured_item_quality_never_becomes_negative():
+    """
+    Качество сотворенного предмета никогда не бывает отрицательным
+    """
+    items = [Item(name="Conjured +5 Dexterity Vest", sell_in=1, quality=1),]
+    GildedRose(items).update_quality()
+    assert items[0].sell_in == 0
+    assert items[0].quality == 0
+
 def test_conjured_item_quality_never_exceeds_50():
     """
     Качество сотворенного предмета никогда не превышает 50.
     """
-    items = [Item(name="Aged Brie", sell_in=10, quality=49),]
+    items = [Item(name="Conjured Aged Brie", sell_in=10, quality=49),]
     GildedRose(items).update_quality()
     assert items[0].sell_in == 9
     assert items[0].quality == 50
