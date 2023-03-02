@@ -24,14 +24,13 @@ class ItemEntity:
         self.sell_in = item.sell_in
         self.quality = item.quality
         self.is_conjured = name.startswith("Conjured ")
+        self.quality_increase_factor = 1
 
     def increase_quality(self):
-        if self.quality < 50:
-            self.quality = self.quality + 1
+        self.quality = min(self.quality + 1 * self.quality_increase_factor, 50)
 
     def decrease_quality(self):
-        if self.quality > 0:
-            self.quality = self.quality - 1
+        self.quality = max(self.quality - 1 * self.quality_increase_factor, 0)
 
     def decrease_sell_in(self):
         self.sell_in = self.sell_in - 1
@@ -87,6 +86,9 @@ class BackstagePasses(ItemEntity):
 
     def change_quality_after_sell_in(self):
         self.quality = 0
+
+    def decrease_quality(self):
+        super().decrease_quality()
 
     def increase_quality(self):
         super().increase_quality()

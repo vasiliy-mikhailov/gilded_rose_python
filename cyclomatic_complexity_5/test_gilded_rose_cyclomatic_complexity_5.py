@@ -165,3 +165,48 @@ def test_conjured_aged_brie_produce_aged_brie_by_factory():
     """
     aged_brie = EntityFactory.create(Item(name="Conjured Aged Brie", sell_in=10, quality=80))
     assert isinstance(aged_brie, AgedBrie)
+
+def test_conjured_sulfuras_does_not_sell_and_quality_does_not_decrease():
+    """
+    Качество «Сотворенного» Sulfuras не ухудшается и он не продается.
+    """
+    item = EntityFactory.create(item=Item(name="Conjured Sulfuras, Hand of Ragnaros", sell_in=10, quality=80))
+    item.update_quality()
+    assert item.sell_in == 10
+    assert item.quality == 80
+
+def test_conjured_aged_brie_becomes_better_after_sell_in_twice_as_fast():
+    """
+    Сотворенный «Выдержанный бри» (Aged Brie) на самом деле становится тем лучше, чем старше он становится в 2 раза быстрее, чем не сотворенный.
+    """
+    item = EntityFactory.create(item=Item(name="Conjured Aged Brie", sell_in=10, quality=1))
+    item.update_quality()
+    assert item.sell_in == 9
+    assert item.quality == 3
+
+def test_conjured_backstage_passes_increase_quality_by_4_if_10_to_6_days_left():
+    """
+    Сотворенные «Проходы за кулисы» (Conjured Backstage passes to a TAFKAL80ETC concert) повышаются в качестве по мере приближения значения sell_in: качество повышается на 4, если осталось 10 дней или меньше.
+    """
+    item = EntityFactory.create(item=Item(name="Conjured Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=6))
+    item.update_quality()
+    assert item.sell_in == 9
+    assert item.quality == 10
+
+def test_conjured_backstage_passes_increase_quality_by_6_if_5_to_1_days_left():
+    """
+    Сотворенные «Проходы за кулисы» (Conjured Backstage passes to a TAFKAL80ETC concert), повышаются в качестве по мере приближения значения sell_in: качество повышается на 6, если осталось 5 дней или меньше.
+    """
+    item = EntityFactory.create(item=Item(name="Conjured Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=7))
+    item.update_quality()
+    assert item.sell_in == 4
+    assert item.quality == 13
+
+def test_conjured_backstage_passes_drop_quality_to_zero_when_0_days_left():
+    """
+    Сотворенные «Проходы за кулисы» (Conjured Backstage passes to a TAFKAL80ETC concert), после концерта качество падает до 0.
+    """
+    item = EntityFactory.create(item=Item(name="Conjured Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=7))
+    item.update_quality()
+    assert item.sell_in == -1
+    assert item.quality == 0
